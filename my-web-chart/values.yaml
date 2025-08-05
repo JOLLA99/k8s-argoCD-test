@@ -1,8 +1,8 @@
 replicaCount: 1
 
 image:
-  repository: httpd
-  tag: "2.4"
+  repository: nginx
+  tag: "1.25"
 
 service:
   type: ClusterIP

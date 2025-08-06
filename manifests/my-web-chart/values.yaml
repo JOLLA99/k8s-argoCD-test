@@ -1,10 +1,19 @@
 replicaCount: 1
 
 image:
-  repository: nginx
-  tag: "1.25"
+  repository: localhost:5000/my-tomcat-app  # Minikube 내장 레지스트리 주소
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
 
 service:
   type: ClusterIP
-  port: 80
+  port: 8080  # Tomcat 기본 포트
 
+ingress:
+  enabled: true
+  hosts:
+    - host: my-tomcat-app.local
+      paths:
+        - path: /
+          pathType: Prefix

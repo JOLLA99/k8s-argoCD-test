@@ -1,0 +1,36 @@
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: my-tomcat-app-environments
+  namespace: argocd # Argo CD가 설치된 네임스페이스
+spec:
+  generators:
+  - list: # 환경 목록을 직접 정의합니다.
+      elements:
+      - environment: dev
+        namespace: dev
+        host: my-tomcat-app-dev.local # dev 환경용 호스트
+      - environment: prod
+        namespace: prod
+        host: my-tomcat-app-prod.local # prod 환경용 호스트
+  template: # 각 환경에 대해 생성될 Application 리소스의 템플릿
+    metadata:
+      name: my-tomcat-app-{{environment}} # 애플리케이션 이름: my-tomcat-app-dev, my-tomcat-app-prod
+      namespace: argocd # Argo CD가 Application 리소스를 생성할 네임스페이스
+    spec:
+      project: default
+      source:
+        repoURL: https://github.com/JOLLA99/k8s-argoCD-test # 실제 애플리케이션 코드 저장소
+        targetRevision: HEAD
+        path: manifests/my-web-chart # Helm 차트 경로
+        helm:
+          valueFiles: # 기본 values.yaml과 환경별 values.yaml을 함께 사용
+            - values.yaml
+            - values-{{environment}}.yaml # values-dev.yaml 또는 values-prod.yaml
+      destination:
+        server: https://kubernetes.default.svc
+        namespace: "{{namespace}}" # dev 또는 prod 네임스페이스에 배포
+      syncPolicy:
+        automated:
+          prune: true
+          selfHeal: true

@@ -25,7 +25,7 @@ spec:
           valueFiles: # 기본 values.yaml과 환경별 values.yaml을 함께 사용
             - values.yaml
             - values-{{environment}}.yaml # values-dev.yaml 또는 values-prod.yaml
-          values:
+          values: |
             ingress:
               hosts:
                 - host: my-tomcat-app-{{environment}}.local

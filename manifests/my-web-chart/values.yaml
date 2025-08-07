@@ -4,7 +4,7 @@ image:
   repository: localhost:5000/my-tomcat-app  # Minikube 내장 레지스트리 주소
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v1.2"
+  tag: ""
 
 service:
   type: ClusterIP
@@ -13,7 +13,7 @@ service:
 ingress:
   enabled: true
   hosts:
-    - host: my-tomcat-app.local
+    - host: {{ .Release.Name }}.local
       paths:
         - path: /
           pathType: Prefix

@@ -1,2 +1,5 @@
 image:
   tag: "v1.0" # dev 환경은 v1.0 이미지 사용
+ingress:
+  hosts:
+    - host: my-tomcat-app-dev.local

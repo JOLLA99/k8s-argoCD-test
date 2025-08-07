@@ -1,2 +1,5 @@
 image:
   tag: "v1.1" # prod 환경은 v1.1 이미지 사용
+ingress:
+  hosts:
+    - host: my-tomcat-app-prod.local

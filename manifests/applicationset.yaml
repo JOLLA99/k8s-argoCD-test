@@ -9,10 +9,8 @@ spec:
       elements:
       - environment: dev
         namespace: dev
-        host: my-tomcat-app-dev.local # dev 환경용 호스트
       - environment: prod
         namespace: prod
-        host: my-tomcat-app-prod.local # prod 환경용 호스트
   template: # 각 환경에 대해 생성될 Application 리소스의 템플릿
     metadata:
       name: my-tomcat-app-{{environment}} # 애플리케이션 이름: my-tomcat-app-dev, my-tomcat-app-prod
@@ -27,6 +25,13 @@ spec:
           valueFiles: # 기본 values.yaml과 환경별 values.yaml을 함께 사용
             - values.yaml
             - values-{{environment}}.yaml # values-dev.yaml 또는 values-prod.yaml
+          values:
+            ingress:
+              hosts:
+                - host: my-tomcat-app-{{environment}}.local
+                  paths:
+                    - path: /
+                      pathType: Prefix
       destination:
         server: https://kubernetes.default.svc
         namespace: "{{namespace}}" # dev 또는 prod 네임스페이스에 배포
